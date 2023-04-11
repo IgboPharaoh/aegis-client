@@ -1,9 +1,6 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { Raleway } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 
-const raleway = Raleway({ subsets: ['latin'] });
 
 export default function Home() {
     return (
