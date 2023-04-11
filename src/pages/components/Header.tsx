@@ -7,7 +7,7 @@ const Header = (): JSX.Element => {
     const router = useRouter();
     return (
         <Flex ml='80px' mr='80px' gap='64px' justifyContent='space-between'>
-            <HStack width='100%' justifyContent='space-between'>
+            <HStack width='100%' >
                 <Text
                     onClick={() => {
                         router.push('/');
@@ -20,8 +20,8 @@ const Header = (): JSX.Element => {
                     Aegis
                 </Text>
             </HStack>
-            <HStack width='100%' justifyContent='space-between'>
-                <CustomButton onClick={() => {}} backgroundColor='#0000b3' width={{ base: '150px' }} height='48px'>
+            <HStack width='100%' justifyContent='flex-end'>
+                <CustomButton onClick={() => {}} backgroundColor='#000066' width={{ base: '150px' }} height='48px'>
                     Create Account
                 </CustomButton>
             </HStack>
