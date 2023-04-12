@@ -60,7 +60,7 @@ export const useCreateAccountHook = () => {
             })
             .catch((error) => {
                 const errorCode = error.code;
-                setCreateAccountState((createAccountState) => ({ ...createAccountState, error: errorCode.message }));
+                setCreateAccountState((createAccountState) => ({ ...createAccountState, error: errorCode.message, isLoading: false }));
                 setLoginData((loginData) => ({ ...loginData, email: '', password: '' }));
             });
     };
