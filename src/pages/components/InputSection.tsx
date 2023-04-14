@@ -71,9 +71,7 @@ const InputSection = ({
                         <CustomButton
                             onClick={onClickButton}
                             width={{ base: '100%', md: '100%', lg: '100%' }}
-                            backgroundColor='#0000b3'
                             borderRadius='4px'
-                            height='48px'
                             isLoading={isLoading}
                         >
                             {buttonLabel}

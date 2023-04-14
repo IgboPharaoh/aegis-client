@@ -7,7 +7,7 @@ const raleway = Raleway({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <ChakraProvider>
+        <ChakraProvider toastOptions={{ defaultOptions: { position: 'top-right' } }}>
             <main className={raleway.className}>
                 <Component {...pageProps} />
             </main>
