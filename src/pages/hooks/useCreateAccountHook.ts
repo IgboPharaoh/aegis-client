@@ -54,9 +54,9 @@ export const useCreateAccountHook = () => {
                 setUserdata(user);
                 console.log(userdata, '<<<<<');
                 setCreateAccountState((createAccountState) => ({ ...createAccountState, isLoading: false, user }));
-                setLoginData((loginData) => ({ ...loginData, email: '', password: '' }));
 
                 router.push('/home');
+                setLoginData((loginData) => ({ ...loginData, email: '', password: '' }));
             })
             .catch((error) => {
                 const errorCode = error.code;

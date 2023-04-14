@@ -55,9 +55,9 @@ export const useSignInHook = () => {
                 const user = userCredential.user;
                 setUserdata(user);
                 setSignIn((signIn) => ({ ...signIn, isLoading: false, user }));
-                setLoginData((loginData) => ({ ...loginData, email: '', password: '' }));
 
                 router.push('/home');
+                setLoginData((loginData) => ({ ...loginData, email: '', password: '' }));
             })
             .catch((error) => {
                 const errorCode = error.code;
