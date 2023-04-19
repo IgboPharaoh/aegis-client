@@ -4,7 +4,10 @@ import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
 import { useDepositTransactionHook } from '../hooks/useDepositHook';
 
-const DepositTransaction = () => {
+export interface DepositTransactionProps {
+    depositCallback: () => void;
+}
+const DepositTransaction = ({ depositCallback }: DepositTransactionProps) => {
     const { sendTransaction, setSendTransaction } = useDepositTransactionHook();
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,12 +41,7 @@ const DepositTransaction = () => {
                         name='amount'
                         type='number'
                     />
-                    <CustomButton
-                        onClick={() => {}}
-                        width={{ base: '100%', md: '100%', lg: '100%' }}
-                        borderRadius='4px'
-                        isLoading={false}
-                    >
+                    <CustomButton onClick={depositCallback} width={{ base: '100%', md: '100%', lg: '100%' }} borderRadius='4px' isLoading={false}>
                         Proceed
                     </CustomButton>
                 </Stack>
