@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dashboard from 'public/dashboard.svg';
 import transactions from 'public/transactions.svg';
 import wallets from 'public/wallets.svg';
@@ -9,9 +9,12 @@ import SideNavLink from './components/SideNavLink';
 import WalletBalance from './components/WalletBalance';
 import SendTransaction from './components/DepositSection';
 import LogoutModal from './components/LogoutModal';
+import PassPhrase from './components/PassPhrase';
+import PassPhaseDrawer from './components/PassPhraseDrawer';
 
 const Home = () => {
-    const [openModal, setOpenModal] = React.useState(false);
+    const [openModal, setOpenModal] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(false);
 
     return (
         <>
@@ -34,7 +37,7 @@ const Home = () => {
                             Wallet
                         </Text>
                         <WalletBalance />
-                        <SendTransaction />
+                        <SendTransaction depositCallback={() => setOpenDrawer(true)} />
                     </Flex>
                 </Box>
 
@@ -48,6 +51,7 @@ const Home = () => {
                 </Box>
             </Flex>
             {openModal && <LogoutModal isOpen={openModal} onClose={() => setOpenModal(false)} />}
+            {openDrawer && <PassPhaseDrawer isOpen={openDrawer} onClose={() => setOpenDrawer(false)} />}
         </>
     );
 };
