@@ -1,7 +1,6 @@
-import { BIP32Interface } from 'bip32';
-import { generateMnemonic, mnemonicToSeed } from 'bip39';
+import { BIP32Interface, fromBase58, fromSeed } from 'bip32';
+import { generateMnemonic, mnemonicToSeed, mnemonicToSeedSync } from 'bip39';
 import { networks, payments } from 'bitcoinjs-lib';
-import keyClass from './bip32api';
 
 // returns mmemonic seeds
 export const getMnemonic = (): string => {
@@ -11,40 +10,59 @@ export const getMnemonic = (): string => {
 // get master private key
 export const getMasterPrivateKey = async (mnemonic: string): Promise<BIP32Interface> => {
     const seed = await mnemonicToSeed(mnemonic);
-    let privateKey = keyClass.fromSeed(seed, networks.bitcoin);
+    let privateKey = fromSeed(seed, networks.testnet);
+
+    return privateKey;
+};
+
+// get master private key
+export const getMasterPrivateKeys = async (mnemonics: string[]): Promise<BIP32Interface[]> => {
+    const seeds = mnemonics.map((mnemonic) => mnemonicToSeedSync(mnemonic));
+    let privateKey = seeds.map((seed) => fromSeed(seed, networks.testnet));
 
     return privateKey;
 };
 
 // generate extended public key from private key
 export const getXpubFromPrivateKey = (privateKey: BIP32Interface, derivationPath: string): string => {
-    const child = privateKey.derivePath(derivationPath).neutered();
-    const xpub = child.toBase58();
+    const child = privateKey.derivePath(derivationPath).neutered().toBase58();
 
-    return xpub;
+    return child;
+};
+
+export const getXpubFromPrivateKeys = (privateKeys: BIP32Interface[], derivationPath: string): string[] => {
+    const child = privateKeys.map((key) => key.derivePath(derivationPath).neutered().toBase58());
+    return child;
 };
 
 // derive child public key from extended public key
 export const getChildPublicKey = (xpub: string, derivationPath: string): BIP32Interface => {
-    const node = keyClass.fromBase58(xpub, networks.bitcoin);
+    const node = fromBase58(xpub, networks.testnet);
     const child = node.derivePath(derivationPath);
 
     return child;
 };
 
-// get address from child public key
-export const getAddressFromChildPubkey = (child: BIP32Interface): payments.Payment => {
-    const address = payments.p2wpkh({
-        pubkey: child.publicKey,
-        network: networks.bitcoin,
-    });
+export const getChildPublicKeys = (xpubs: string[], derivationPath: string): BIP32Interface[] => {
+    const nodes = xpubs.map((xpub) => fromBase58(xpub, networks.testnet));
+    const child = nodes.map((node) => node.derivePath(derivationPath));
 
-    return address;
+    return child;
 };
 
 // get multisig address from child public key
 export const getMultisigAddress = (userKey: BIP32Interface, redeemKey: BIP32Interface, systemKey: BIP32Interface): payments.Payment => {
     const pubkeys = [userKey.publicKey, redeemKey.publicKey, systemKey.publicKey].map((hex) => hex);
+
+    const address = payments.p2wsh({
+        redeem: payments.p2ms({ m: 2, pubkeys }),
+    });
+
+    return address;
+};
+
+export const getMultisigAddresses = (keys: BIP32Interface[]): payments.Payment => {
+    const pubkeys = keys.map((hex) => hex.publicKey);
 
     const address = payments.p2wsh({
         redeem: payments.p2ms({ m: 2, pubkeys }),
@@ -78,7 +96,7 @@ export const computeChecksum = (symbols: any) => {
 };
 
 //Internal function that does the character to symbol expansion
-export const expandChecksum = (character: string): number[] => {
+export const expandChecksum = (character: any): number[] => {
     let groups: number[] = [];
     let symbols: number[] = [];
 
