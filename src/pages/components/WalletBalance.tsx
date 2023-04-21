@@ -20,7 +20,7 @@ const WalletBalance = () => {
             <Text pt='8px' pb='8px' fontSize='36px' fontWeight='800'>
                 $ 50, 000, 000. 58
             </Text>
-            <Text opacity='0.8' fontWeight='500'>{`${new Date().toDateString()},  ${timer.hours} : ${timer.min}`}</Text>
+            {/* <Text opacity='0.8' fontWeight='500'>{`${new Date().toDateString()},  ${timer.hours} : ${timer.min}`}</Text> */}
             <Flex justifyContent='space-between' gap='32px' mt='24px' bgColor='#8484fb64' p='16px' borderRadius='8px'>
                 <Flex cursor='pointer' borderRadius='8px' flexDir='column' bgColor='white' w='100%' h='48px' justifyContent='center'>
                     <Text color='black' fontWeight='600'>
