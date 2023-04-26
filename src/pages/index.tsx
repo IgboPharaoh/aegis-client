@@ -1,8 +1,19 @@
+import React from 'react';
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
-
+import { Flex, Text, Box, Stack, Center } from '@chakra-ui/react';
+import CustomButton from './components/CustomButton';
+import CustomInput from './components/CustomInput';
+import CommaComponent from './components/CommaComponent';
+import { useRouter } from 'next/router';
+import Header from './components/Header';
+import useExternalKeysHook from './hooks/useExternalKeysHook';
 
 export default function Home() {
+    const { pubkey1, pubkey2, error, isLoading, handleInputChange, generateWallet } = useExternalKeysHook();
+
+    const router = useRouter();
+
     return (
         <>
             <Head>
@@ -11,7 +22,115 @@ export default function Home() {
                 <meta name='viewport' content='width=device-width, initial-scale=1' />
                 <link rel='icon' href='/favicon.ico' />
             </Head>
-            <main className={styles.main}></main>
+            <main className={styles.main}>
+                <Box mt='16px' width='100%' position='absolute'>
+                    <Header onClick={() => router.push('/')} />
+                </Box>
+                <Flex>
+                    <Box bgColor='#f5f8ff' width='100%' height='100vh'>
+                        <Flex flexDir='column' height='100%' justifyContent='center' alignItems='center'>
+                            <Box width={'50%'}>
+                                <Text color='black' fontWeight='700' fontSize='48px'>
+                                    Generate Wallet
+                                </Text>
+                                <Text opacity='0.85' fontSize='16px' whiteSpace='nowrap'>
+                                    Use your <strong>public keys</strong> to get a multisig descriptor wallet or
+                                </Text>
+                                <Text _hover={{ textDecor: 'underline' }} cursor='pointer' opacity='0.85' fontSize='15px'>
+                                    Create an account to get one
+                                </Text>
+                                <Stack mt='80px' spacing='24px'>
+                                    <CustomInput
+                                        labelName='Public Key 1'
+                                        placeholder='Enter your first public key'
+                                        value={pubkey1}
+                                        onChange={handleInputChange}
+                                        name='pubkey1'
+                                        type='text'
+                                    />
+                                    <CustomInput
+                                        labelName='Public Key 2'
+                                        placeholder='Enter your second public key'
+                                        value={pubkey2}
+                                        onChange={handleInputChange}
+                                        name='pubkey2'
+                                        type='text'
+                                    />
+                                    <Flex alignItems='center' justifyContent='space-between' w='100%' gap='16px'>
+                                        <CustomButton
+                                            onClick={generateWallet}
+                                            width={{ base: '100%', md: '100%', lg: '100%' }}
+                                            borderRadius='4px'
+                                            isLoading={isLoading}
+                                        >
+                                            Generate Wallet
+                                        </CustomButton>
+                                        <Text>or</Text>
+                                        <CustomButton
+                                            onClick={() => router.push('/sign-up')}
+                                            width={{ base: '50%', md: '50%', lg: '50%' }}
+                                            borderRadius='4px'
+                                            backgroundColor='transparent'
+                                            color='black'
+                                            border='1px solid black'
+                                        >
+                                            Create account
+                                        </CustomButton>
+                                    </Flex>
+                                </Stack>
+                                {error && (
+                                    <Box pt='8px'>
+                                        <Text textAlign='center' color='red' fontSize='14'>
+                                            Error: {error}
+                                        </Text>
+                                    </Box>
+                                )}
+                            </Box>
+                        </Flex>
+                    </Box>
+                    <Box bgColor='#0000b3' width='100%' height='100vh'>
+                        <Flex flexDir='column' height='100%' justifyContent='center' alignItems='center'>
+                            <Box>
+                                <Flex>
+                                    <Box mt='-64px' mr='-30px'>
+                                        <CommaComponent />
+                                    </Box>
+                                    <Box>
+                                        <Text color='#ffffff' fontWeight='700' fontSize='72px'>
+                                            Multisig with
+                                        </Text>
+                                        <Text lineHeight='64px' color='#ffffff' fontWeight='700' fontSize='72px'>
+                                            Superpowers.
+                                        </Text>
+                                        <Flex pt='72px' alignItems='flex-start' gap='36px'>
+                                            <Box ml='6px' mt='12px' opacity='0.75' bgColor='#ffffff' h='1px' w='64px'></Box>
+                                            <Box>
+                                                <Text lineHeight='32px' w='400px' color='#ffffff'>
+                                                    Using Aegis gives you access to a multisignature descriptor wallet service managed with your
+                                                    pubkeys
+                                                </Text>
+                                                <Flex pt='36px' gap='16px'>
+                                                    <Center fontWeight='700' color='#ffffff' borderRadius='32px' w='48px' h='48px' bgColor='black'>
+                                                        SE
+                                                    </Center>
+                                                    <Box>
+                                                        <Text fontWeight='700' color='#ffffff'>
+                                                            Solomon Eze
+                                                        </Text>
+                                                        <Text fontSize='12px' color='#ffffff'>
+                                                            Sofutou Eaenjinia
+                                                        </Text>
+                                                    </Box>
+                                                </Flex>
+                                            </Box>
+                                        </Flex>
+                                    </Box>
+                                </Flex>
+                            </Box>
+                        </Flex>
+                    </Box>
+                </Flex>
+            </main>
         </>
     );
 }
