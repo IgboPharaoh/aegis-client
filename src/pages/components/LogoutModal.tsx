@@ -31,7 +31,7 @@ const LogoutModal = ({ isOpen, onClose }: LogoutModalProps) => {
                 setIsLoading(false);
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
                 toast({
                     title: 'Error with Signing you out!!.',
                     description: "It's not you, it's us, you cannot be signed out at this moment.",
