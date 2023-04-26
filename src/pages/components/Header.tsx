@@ -3,11 +3,11 @@ import { Flex, Text, Link, HStack } from '@chakra-ui/react';
 import CustomButton from './CustomButton';
 import { useRouter } from 'next/router';
 
-const Header = (): JSX.Element => {
+const Header = ({ onClick, buttonLabel = 'Create Account' }: { onClick: () => void; buttonLabel?: string }): JSX.Element => {
     const router = useRouter();
     return (
         <Flex ml='80px' mr='80px' gap='64px' justifyContent='space-between'>
-            <HStack width='100%' >
+            <HStack width='100%'>
                 <Text
                     onClick={() => {
                         router.push('/');
@@ -21,8 +21,8 @@ const Header = (): JSX.Element => {
                 </Text>
             </HStack>
             <HStack width='100%' justifyContent='flex-end'>
-                <CustomButton onClick={() => {}} backgroundColor='#000066' width={{ base: '150px' }} height='48px'>
-                    Create Account
+                <CustomButton onClick={onClick} backgroundColor='#000066' width={{ base: '150px' }} height='48px'>
+                    {buttonLabel}
                 </CustomButton>
             </HStack>
         </Flex>
