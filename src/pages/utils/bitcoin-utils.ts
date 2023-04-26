@@ -10,7 +10,7 @@ export const getMnemonic = (): string => {
 // get master private key
 export const getMasterPrivateKey = async (mnemonic: string): Promise<BIP32Interface> => {
     const seed = await mnemonicToSeed(mnemonic);
-    let privateKey = fromSeed(seed, networks.testnet);
+    let privateKey = fromSeed(seed, networks.regtest);
 
     return privateKey;
 };
@@ -18,7 +18,7 @@ export const getMasterPrivateKey = async (mnemonic: string): Promise<BIP32Interf
 // get master private key
 export const getMasterPrivateKeys = async (mnemonics: string[]): Promise<BIP32Interface[]> => {
     const seeds = mnemonics.map((mnemonic) => mnemonicToSeedSync(mnemonic));
-    let privateKey = seeds.map((seed) => fromSeed(seed, networks.testnet));
+    let privateKey = seeds.map((seed) => fromSeed(seed, networks.regtest));
 
     return privateKey;
 };
@@ -37,14 +37,14 @@ export const getXpubFromPrivateKeys = (privateKeys: BIP32Interface[], derivation
 
 // derive child public key from extended public key
 export const getChildPublicKey = (xpub: string, derivationPath: string): BIP32Interface => {
-    const node = fromBase58(xpub, networks.testnet);
+    const node = fromBase58(xpub, networks.regtest);
     const child = node.derivePath(derivationPath);
 
     return child;
 };
 
 export const getChildPublicKeys = (xpubs: string[], derivationPath: string): BIP32Interface[] => {
-    const nodes = xpubs.map((xpub) => fromBase58(xpub, networks.testnet));
+    const nodes = xpubs.map((xpub) => fromBase58(xpub, networks.regtest));
     const child = nodes.map((node) => node.derivePath(derivationPath));
 
     return child;
@@ -72,7 +72,12 @@ export const getMultisigAddresses = (keys: BIP32Interface[]): payments.Payment =
 };
 
 // descriptor format: wpkh(xpriv+derivationpath)#checksum
-export const descriptor = (pubkeys: any) => `sh(multi(2,${pubkeys[0]},${pubkeys[1]},${pubkeys[2]}))`;
+export const descriptorsss = (pubkeys: any) => `sh(multi(2,${pubkeys[0]},${pubkeys[1]},${pubkeys[2]}))`;
+
+const descriptorFormat = (childPubkeys: BIP32Interface[]) =>
+    `wsh(multi(2,[${childPubkeys[0]?.publicKey.toString('hex')},${childPubkeys[1]?.publicKey.toString('hex')},${childPubkeys[2]?.publicKey.toString(
+        'hex'
+    )}]))`;
 
 // checksum parameters
 const INPUT_CHARSET = '0123456789()[],\'/*abcdefgh@:$%{}IJKLMNOPQRSTUVWXYZ&+-.;<=>?!^_|~ijklmnopqrstuvwxyzABCDEFGH`#"\\ ';

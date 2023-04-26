@@ -52,7 +52,6 @@ export const useCreateAccountHook = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 setUserdata(user);
-                console.log(userdata, '<<<<<');
                 setCreateAccountState((createAccountState) => ({ ...createAccountState, isLoading: false, user }));
 
                 router.push('/home');

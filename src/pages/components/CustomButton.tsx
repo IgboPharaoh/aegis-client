@@ -18,7 +18,7 @@ export interface CustomButtonProps {
 
 const CustomButton = ({ children, ...props }: CustomButtonProps): JSX.Element => {
     return (
-        <div>
+        <>
             <Button
                 fontSize={{ base: '12px', md: '13px', lg: '14px' }}
                 p={{ base: '10px', md: '13px', lg: '16px' }}
@@ -30,7 +30,7 @@ const CustomButton = ({ children, ...props }: CustomButtonProps): JSX.Element =>
             >
                 {children}
             </Button>
-        </div>
+        </>
     );
 };
 

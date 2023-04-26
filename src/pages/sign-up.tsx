@@ -4,9 +4,11 @@ import { Box, Flex } from '@chakra-ui/react';
 import { useCreateAccountHook } from '@/pages/hooks/useCreateAccountHook';
 import PageDesign from './components/PageDesign';
 import InputSection from './components/InputSection';
+import { useRouter } from 'next/router';
 
 const SignUp = () => {
     const { loginData, setLoginData, email, password, error, createUserAccount, isLoading } = useCreateAccountHook();
+    const router = useRouter();
 
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +22,7 @@ const SignUp = () => {
     return (
         <div>
             <Box mt='16px' width='100%' position='absolute'>
-                <Header />
+                <Header onClick={() => router.push('/sign-in')}  buttonLabel="Login to Account" />
             </Box>
             <Flex>
                 <InputSection
