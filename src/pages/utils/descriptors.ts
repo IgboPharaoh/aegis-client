@@ -7,7 +7,7 @@ import { addCheckSumToDescriptor, verifyDescriptorChecksum } from './bitcoin-uti
 const { Descriptor } = descriptor.DescriptorsFactory(secp256k1);
 
 export const deriveDescriptorAddress = (childPubkeys: Buffer[], sysKey: BIP32Interface, network?: Network) => {
-    const descriptorFormat = `wsh(multi(2,[${childPubkeys[0]},${childPubkeys[1]},${sysKey.publicKey.toString('hex')[2]}]))`;
+    const descriptorFormat = `wsh(multi(2,[${childPubkeys[0].toString('hex')},${childPubkeys[1].toString('hex')},${sysKey.publicKey.toString('hex')}]))`;
 
     const descriptorConstructor = new Descriptor({
         expression: descriptorFormat,
