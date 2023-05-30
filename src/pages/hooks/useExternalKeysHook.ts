@@ -1,11 +1,16 @@
 import { ChangeEvent, useState } from 'react';
 import { BIP32Interface } from 'bip32';
-import { getChildPublicKey, getMasterPrivateKey, getMnemonic, getXpubFromPrivateKey } from '../utils/bitcoin-utils';
+import { generateXpubFn, getChildPublicKey, getMasterPrivateKey, getMnemonic, getXpubFromPrivateKey } from '../utils/bitcoin-utils';
 import { deriveDescriptorAddress } from '../utils/descriptors';
 import { useToast } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 const useExternalKeysHook = () => {
-    const [pubkeys, setPubkeys] = useState({ pubkey1: '', pubkey2: '' });
+    const router = useRouter();
+    const [pubkeys, setPubkeys] = useState({
+        pubkey1: '030edbabe6e85cb8a6e489cd0742f6d6b3b1b7b6d537a3c7d5a245cbc710e23ca1',
+        pubkey2: '036f8eae883cefe75143ced345cec4155bcf56ab0e2f1cce7228005f8e88c7d5f2',
+    });
     const [functionModerator, setFunctionModerator] = useState({ isLoading: false, error: '' });
 
     const { pubkey1, pubkey2 } = pubkeys;
@@ -14,8 +19,9 @@ const useExternalKeysHook = () => {
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
+        const { name, value } = event.target;
 
-        setPubkeys((pubkey) => ({ ...pubkey, [event.target.name]: event.target.value }));
+        setPubkeys((pubkey) => ({ ...pubkey, [name]: value }));
     };
 
     const getSystemPublicKey = async () => {
@@ -60,10 +66,13 @@ const useExternalKeysHook = () => {
 
     const generateWallet = async () => {
         /*** generate system key ***/
-        const generateSysPubKey: BIP32Interface | undefined = await getSystemPublicKey();
+        const generateSysPubKey = generateXpubFn();
+        console.log({ generateSysPubKey });
+
+        // const generateSysPubKey: BIP32Interface | undefined = await getSystemPublicKey();
 
         if (generateSysPubKey) {
-            return toast({
+            toast({
                 title: 'System public key generated.',
                 description: 'Your system public key has been generated...setting up your address',
                 status: 'success',
@@ -79,18 +88,26 @@ const useExternalKeysHook = () => {
         }
 
         // generate descriptor address
-        const descriptAddr = deriveDescriptorAddress([Buffer.from(pubkey1), Buffer.from(pubkey2)], generateSysPubKey!);
+        const descriptAddr = deriveDescriptorAddress([Buffer.from(pubkey1), Buffer.from(pubkey2)], generateSysPubKey);
+        console.log(descriptAddr, 'descriptor address');
+
+        if (!descriptAddr) {
+            setFunctionModerator({ ...functionModerator, isLoading: false });
+        }
 
         setFunctionModerator({ ...functionModerator, isLoading: false });
         if (descriptAddr) {
+            // router.push('/home');
+
             return toast({
                 title: 'Descriptor address generated.',
                 description: 'All set your, your account will be ready in 1..2..3',
                 status: 'success',
-                duration: 3000,
+                duration: 6000,
                 isClosable: true,
             });
         }
+
         return descriptAddr;
     };
 

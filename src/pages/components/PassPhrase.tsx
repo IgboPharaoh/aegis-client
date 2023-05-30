@@ -35,7 +35,7 @@ const PassPhrase = () => {
                     _placeholder={{ color: 'black' }}
                     onChange={handleChange}
                 />
-            </Box>
+            </Box> 
             <Box
                 display='grid'
                 gridTemplateColumns='repeat(3, 4rem)'

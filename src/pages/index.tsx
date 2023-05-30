@@ -12,6 +12,15 @@ import useExternalKeysHook from './hooks/useExternalKeysHook';
 export default function Home() {
     const { pubkey1, pubkey2, error, isLoading, handleInputChange, generateWallet } = useExternalKeysHook();
 
+    /**
+     * Dummy public keys
+     * pubkey1: 030edbabe6e85cb8a6e489cd0742f6d6b3b1b7b6d537a3c7d5a245cbc710e23ca1
+     * pibkey2:  036f8eae883cefe75143ced345cec4155bcf56ab0e2f1cce7228005f8e88c7d5f2
+     * pibkey3:  02b42e6cb6303f0ad47fbcbe9829a83b75def285b0b1d95d70229de505813db783
+     * THis is a descriptor recieveing address
+     * descriptorAddress:  tb1qs56ghf6l58umwk54lvr25syz67cjgrdwj682kjnd03ftyfz4h7gq3p248q
+     */
+
     const router = useRouter();
 
     return (

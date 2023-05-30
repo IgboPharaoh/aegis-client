@@ -1,23 +1,16 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Box, Flex, HStack, Stack, Text } from '@chakra-ui/react';
 import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
-import { useDepositTransactionHook } from '../hooks/useDepositHook';
+import { useCreatePsbtTransaction } from '../hooks/useCreatePsbtTransaction';
 
 export interface DepositTransactionProps {
     depositCallback: () => void;
     onClickTitle: () => void;
 }
-const DepositTransaction = ({ depositCallback, onClickTitle }: DepositTransactionProps) => {
-    const { sendTransaction, setSendTransaction } = useDepositTransactionHook();
-    const handleInputChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            event.preventDefault();
 
-            setSendTransaction((sendTransaction) => ({ ...sendTransaction, [event.target.name]: event.target.value }));
-        },
-        [sendTransaction]
-    );
+const DepositTransaction = ({ depositCallback, onClickTitle }: DepositTransactionProps) => {
+    const { setAddress, setAmount, address, amount } = useCreatePsbtTransaction();
 
     return (
         <div>
@@ -55,16 +48,16 @@ const DepositTransaction = ({ depositCallback, onClickTitle }: DepositTransactio
                     <CustomInput
                         labelName='Address'
                         placeholder='Enter the recipient address'
-                        value={sendTransaction.address}
-                        onChange={handleInputChange}
+                        value={address}
+                        onChange={() => setAddress(address)}
                         name='address'
                         type='text'
                     />
                     <CustomInput
                         labelName='Amount'
                         placeholder='Enter the amount you want to send'
-                        value={sendTransaction.amount}
-                        onChange={handleInputChange}
+                        value={amount}
+                        onChange={() => setAmount(amount)}
                         name='amount'
                         type='number'
                     />

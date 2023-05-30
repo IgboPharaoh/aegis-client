@@ -50,6 +50,17 @@ export const getChildPublicKeys = (xpubs: string[], derivationPath: string): BIP
     return child;
 };
 
+export const generateXpubFn = () => {
+    const mnemonic = generateMnemonic(256);
+    const seed = mnemonicToSeedSync(mnemonic);
+    const node = fromSeed(seed);
+    const path = "m/84'/0'/0'";
+    const string = node.derivePath(path).neutered().toBase58();
+
+    const childXpub: string = fromBase58(string).derivePath(`0/1`).publicKey.toString('hex');
+    return childXpub;
+};
+
 // get multisig address from child public key
 export const getMultisigAddress = (userKey: BIP32Interface, redeemKey: BIP32Interface, systemKey: BIP32Interface): payments.Payment => {
     const pubkeys = [userKey.publicKey, redeemKey.publicKey, systemKey.publicKey].map((hex) => hex);
