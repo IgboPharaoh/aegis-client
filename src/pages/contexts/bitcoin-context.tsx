@@ -32,67 +32,68 @@ export const BitcoinContextProvider = memo(function BitcoinContextProvider({ chi
     });
     const [address, setAddress] = useState<Address[]>([]);
 
-    useEffect(() => {
-        // generate user keys
-        const getSeedValues = async () => {
-            try {
-                const currentMnemonic = getMnemonic();
-                setMnemonic(currentMnemonic);
+    // useEffect(() => {
+    //     // generate user keys
+    //     const getSeedValues = async () => {
+    //         try {
+    //             const currentMnemonic = getMnemonic();
+    //             setMnemonic(currentMnemonic);
 
-                // we'll be using hard coded mmenomics for implementation
-                const userMnemonic1 =
-                    'price body excite behind emerge gym trumpet fetch direct agent cute audit robot credit mimic forward much energy century trial sight almost seek insane';
-                const userMnemonic2 =
-                    'blame race elite shoulder infant hip army inquiry tomato woman regret occur camera student message outdoor orange gloom luxury mango tide horn fluid web';
-                const systemMnemonic =
-                    'glow donkey gravity coil lunch pelican topic method attract eye special onion because raven book treat member surprise you display vivid travel lizard weird';
+    //             // we'll be using hard coded mmenomics for implementation
+    //             const userMnemonic1 =
+    //                 'price body excite behind emerge gym trumpet fetch direct agent cute audit robot credit mimic forward much energy century trial sight almost seek insane';
+    //             const userMnemonic2 =
+    //                 'blame race elite shoulder infant hip army inquiry tomato woman regret occur camera student message outdoor orange gloom luxury mango tide horn fluid web';
+    //             const systemMnemonic =
+    //                 'glow donkey gravity coil lunch pelican topic method attract eye special onion because raven book treat member surprise you display vivid travel lizard weird';
 
-                const privateKeys = await getMasterPrivateKeys([userMnemonic1, userMnemonic2, systemMnemonic]);
-                setPrivateKeys(privateKeys);
+    //             const privateKeys = await getMasterPrivateKeys([userMnemonic1, userMnemonic2, systemMnemonic]);
+    //             setPrivateKeys(privateKeys);
 
-                setFingerPrint((fingerPrint) => ({
-                    ...fingerPrint,
-                    userFingerprint1: privateKeys[0].fingerprint,
-                    userFingerprint2: privateKeys[1].fingerprint,
-                    systemFingerprint: privateKeys[2].fingerprint,
-                }));
+    //             setFingerPrint((fingerPrint) => ({
+    //                 ...fingerPrint,
+    //                 userFingerprint1: privateKeys[0].fingerprint,
+    //                 userFingerprint2: privateKeys[1].fingerprint,
+    //                 systemFingerprint: privateKeys[2].fingerprint,
+    //             }));
 
-                const derivationPath = "m/84'/0'/0'"; // P2WPKH
-                const xpubs = getXpubFromPrivateKeys(privateKeys, derivationPath);
-                setXpub(xpubs);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    //             const derivationPath = "m/84'/0'/0'"; // P2WPKH
+    //             const xpubs = getXpubFromPrivateKeys(privateKeys, derivationPath);
+    //             setXpub(xpubs);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
 
-        getSeedValues();
-    }, []);
+    //     getSeedValues();
+    // }, []);
 
-    useEffect(() => {
-        try {
-            const addressBatch: Address[] = [];
-            for (let i = 0; i < 10; i++) {
-                const derivationPath = `0/${i}`;
+    // useEffect(() => {
+    //     try {
+    //         const addressBatch: Address[] = [];
+    //         for (let i = 0; i < 10; i++) {
+    //             const derivationPath = `0/${i}`;
 
-                const childPubkeys = getChildPublicKeys(xpub, derivationPath);
-                const mulltisigAddress = getMultisigAddresses(childPubkeys);
-                addressBatch?.push({ ...mulltisigAddress, derivationPath, masterFingerprint: fingerPrint });
+    //             const childPubkeys = getChildPublicKeys(xpub, derivationPath);
 
-                // create descriptor from child public keys
-                const descriptor = `wsh(multi(2,[${childPubkeys[0]?.publicKey.toString('hex')},${childPubkeys[1]?.publicKey.toString(
-                    'hex'
-                )},${childPubkeys[2]?.publicKey.toString('hex')}]))`;
+    //             const mulltisigAddress = getMultisigAddresses(childPubkeys);
+    //             addressBatch?.push({ ...mulltisigAddress, derivationPath, masterFingerprint: fingerPrint });
 
-                const addChecksum = addCheckSumToDescriptor(descriptor);
-                setDescriptorWallet(descriptor);
-                setDescriptorWithChecksum(addChecksum);
+    //             // create descriptor from child public keys
+    //             const descriptor = `wsh(multi(2,[${childPubkeys[0]?.publicKey.toString('hex')},${childPubkeys[1]?.publicKey.toString(
+    //                 'hex'
+    //             )},${childPubkeys[2]?.publicKey.toString('hex')}]))`;
 
-                setAddress(addressBatch);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }, [xpub, fingerPrint]);
+    //             const addChecksum = addCheckSumToDescriptor(descriptor);
+    //             setDescriptorWallet(descriptor);
+    //             setDescriptorWithChecksum(addChecksum);
+
+    //             setAddress(addressBatch);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }, [xpub, fingerPrint]);
 
     return <BitcoinContext.Provider value={{ mnemonic, xpub, address, descriptorWithChecksum }}>{children}</BitcoinContext.Provider>;
 });
