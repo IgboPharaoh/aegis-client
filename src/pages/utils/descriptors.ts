@@ -13,6 +13,7 @@ export const deriveDescriptorAddress = (childPubkeys: Buffer[], sysKey: string) 
 
     const signersPubKeys = [childPubkeys[0], Buffer.from(sysKey)];
 
+
     const descriptorConstructor = new Descriptor({
         expression,
         network,
